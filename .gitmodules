@@ -1,0 +1,3 @@
+[submodule "extern/Gxt.Net"]
+	path = extern/Gxt.Net
+	url = https://github.com/game-exchange-token/Gxt.Net
