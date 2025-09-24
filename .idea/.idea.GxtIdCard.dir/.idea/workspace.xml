@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4658bb73-8079-4e0d-853a-c43b4ed722e7" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extern/Gxt.Net" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/extern/Elin.Gxt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,10 +14,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/extern/Gxt.Net" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/extern/Elin.Gxt" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/extern/Gxt.Net/Gxt.Net.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/extern/Elin.Gxt/Elin.Gxt.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "customColor": "",

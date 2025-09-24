@@ -54,5 +54,8 @@
         <Reference Include="$(ElinGamePath)\Elin_Data\Managed\System.Core.dll">
             <Private>False</Private>
         </Reference>
+        <Reference Include="$(ElinGamePath)\Elin_Data\Managed\com.rlabrecque.steamworks.net.dll">
+            <Private>False</Private>
+        </Reference>
     </ItemGroup>
 </Project>

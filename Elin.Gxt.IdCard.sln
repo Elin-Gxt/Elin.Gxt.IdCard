@@ -4,7 +4,7 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GxtIdCard", "GxtIdCard.csproj", "{8B950087-74AE-BDAD-A504-54CE0A169AC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gxt.Net", "extern\Gxt.Net\Gxt.Net.csproj", "{855AFCC2-8796-4389-8F37-4082DC4FDD46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elin.Gxt", "extern\Elin.Gxt\Elin.Gxt.csproj", "{855AFCC2-8796-4389-8F37-4082DC4FDD46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

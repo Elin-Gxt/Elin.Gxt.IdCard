@@ -5,14 +5,20 @@
         <Platforms>AnyCPU</Platforms>
         <LangVersion>preview</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>GxtIdCard</RootNamespace>
-        <AssemblyName>GxtIdCard</AssemblyName>
+        <RootNamespace>Elin.Gxt.IdCard</RootNamespace>
+        <AssemblyName>Elin.Gxt.IdCard</AssemblyName>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="$(ElinGamePath)\Package\Mod_CustomWhateverLoader\CustomWhateverLoader.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
 
     <ItemGroup>
       <None Remove="Directory.Build.props" />
@@ -34,7 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="extern\Gxt.Net\Gxt.Net.csproj" />
+      <ProjectReference Include="extern\Elin.Gxt\Elin.Gxt.csproj" />
     </ItemGroup>
 
     <Target Name="CopyAssets" AfterTargets="AfterBuild">

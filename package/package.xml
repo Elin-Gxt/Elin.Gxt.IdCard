@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Meta>
-    <title>GxtIdCard</title>
+    <title>GXT ID Card</title>
     <id>iah.gxt.IdCard</id>
     <author>IAmHardliner</author>
-    <loadPriority>5</loadPriority>
+    <loadPriority>11</loadPriority>
     <version>0.23.50</version>
     <tags>General</tags>
     <description>
