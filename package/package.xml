@@ -3,7 +3,7 @@
     <title>GXT ID Card</title>
     <id>iah.gxt.IdCard</id>
     <author>IAmHardliner</author>
-    <loadPriority>11</loadPriority>
+    <loadPriority>60</loadPriority>
     <version>0.23.50</version>
     <tags>General</tags>
     <description>

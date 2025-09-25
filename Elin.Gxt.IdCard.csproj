@@ -5,8 +5,8 @@
         <Platforms>AnyCPU</Platforms>
         <LangVersion>preview</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>Elin.Gxt.IdCard</RootNamespace>
-        <AssemblyName>Elin.Gxt.IdCard</AssemblyName>
+        <RootNamespace>ElinGxtIdCard</RootNamespace>
+        <AssemblyName>ElinGxtIdCard</AssemblyName>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -15,7 +15,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="$(ElinGamePath)\Package\Mod_CustomWhateverLoader\CustomWhateverLoader.dll">
+      <Reference Include="$(ElinWorkshopPath)\3544010094\CustomWhateverLoader.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="$(ElinWorkshopPath)\3400020753\YKFramework.dll">
           <Private>false</Private>
       </Reference>
     </ItemGroup>
