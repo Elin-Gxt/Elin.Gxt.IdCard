@@ -49,20 +49,20 @@ class AddressBookContactsTab : YKLayout<Identities>
     {
         _Values = [.. Layer.Data.Values];
         var d = Dropdown(CreateOptions(), i => _Current = i, _Current);
-        var h = Horizontal();
-        h.Button("Open", () =>
+        var h1 = Horizontal();
+        h1.Button("Open", () =>
         {
             SE.Rotate();
             EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(_Values[_Current].Meta));
         });
 
-        h.Button("My ID Card", () =>
+        h1.Button("My ID Card", () =>
         {
             SE.Rotate();
             EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(AddressBook.GetOwnContactInfo()!));
-        });
+        }).WithMinWidth(110);
 
-        h.Button("Delete", () =>
+        h1.Button("Delete", () =>
         {
             var id = _Values[_Current].VerificationKey;
             AddressBook.Contacts!.Remove(id);
@@ -70,14 +70,17 @@ class AddressBookContactsTab : YKLayout<Identities>
             d.options = CreateOptions().ToDropdownOptions();
         });
 
-        h.Button("Import from Clipboard", () =>
+        var h2 = Horizontal();
+        h2.Button("Import from Clipboard", () =>
         {
             AddressBook.ImportFromClipboard(id =>
             {
                 _Values.Add(id);
                 d.options = CreateOptions().ToDropdownOptions();
             });
-        });
+        }).WithMinWidth(180);
+
+        h2.Button("Export your ID Card", AddressBook.ExportToClipboard).WithMinWidth(180);
     }
 }
 
@@ -101,8 +104,7 @@ static class ContextMenu
     [CwlContextMenu("GXT/gxt_ui_id_card_copy")]
     internal static void CopyIdToClipboard()
     {
-        GUIUtility.systemCopyBuffer = AddressBook.GetIdCardToken();
-        UiHelpers.Say("ID Card copied to Clipboard");
+        AddressBook.ExportToClipboard();
     }
 
     [CwlContextMenu("GXT/gxt_ui_id_card_import")]

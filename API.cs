@@ -53,6 +53,12 @@ public class ContactInfo
              (string)Race.Clone()
         );
     }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    // only used for serialization
+    [JsonConstructor]
+    private ContactInfo() {}
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 }
 public class GxtIdentity
 {
@@ -84,11 +90,18 @@ public class GxtIdentity
              Meta.Clone()
         );
     }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    // only used for serialization
+    [JsonConstructor]
+    private GxtIdentity() {}
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 }
 
 public static class AddressBook
 {
     public static bool IsLoaded { get; internal set; } = false;
+    public static string? Id { get; internal set; }
+
     public static ImmutableIdentities? GetContacts()
     {
         return IsLoaded ? Contacts!.ToImmutableDictionary() : null;
@@ -105,14 +118,18 @@ public static class AddressBook
         ) : null;
     }
 
-    [JsonProperty]
     internal static Identities? Contacts { get; set; }
-    [JsonProperty]
     internal static string? PrivateKey;
 
     internal static string? GetIdCardToken()
     {
         return IsLoaded ? GxtSdk.MakeIdCard(PrivateKey!, GetOwnContactInfo()) : null;
+    }
+
+    internal static void ExportToClipboard()
+    {
+        GUIUtility.systemCopyBuffer = GetIdCardToken()!;
+        UiHelpers.Say("ID Card copied to Clipboard");
     }
 
     internal static void ImportFromClipboard(Action<GxtIdentity>? onNewIdentity = null)
@@ -126,6 +143,12 @@ public static class AddressBook
         var id_card_token = GUIUtility.systemCopyBuffer;
         var envelope = GxtSdk.VerifyMessage<ContactInfo>(id_card_token);
         var id = envelope.verification_key;
+        if (id == Id)
+        {
+            UiHelpers.Say("You can't import your own ID Card!");
+            return;
+        }
+
         if (Contacts!.ContainsKey(id))
         {
             Contacts[id].Meta = envelope.payload;

@@ -10,6 +10,7 @@ namespace ElinGxtIdCard.Patches;
 internal static class GamePatches
 {
     const string PRIVATE_KEY_CHUNK = "Elin.Gxt.PrivateKey";
+    const string PRIVATE_ID_CHUNK = "Elin.Gxt.ID";
     const string ADDRESS_BOOK_CHUNK = "Elin.Gxt.AddressBook";
 
     [HarmonyPrefix, HarmonyPatch(typeof(Game), nameof(Game.GotoTitle))]
@@ -27,6 +28,13 @@ internal static class GamePatches
         }
         context.Save(AddressBook.PrivateKey, PRIVATE_KEY_CHUNK);
 
+        if (string.IsNullOrWhiteSpace(AddressBook.Id))
+        {
+            var envelope = GxtSdk.VerifyMessage<ContactInfo>(AddressBook.GetIdCardToken()!);
+            AddressBook.Id = envelope.verification_key;
+        }
+        context.Save(AddressBook.Id, PRIVATE_ID_CHUNK);
+
         AddressBook.Contacts ??= [];
         context.Save(AddressBook.Contacts, ADDRESS_BOOK_CHUNK);
     }
@@ -40,9 +48,16 @@ internal static class GamePatches
             AddressBook.PrivateKey = GxtSdk.MakeKey();
         }
 
+        if (!context.Load(out string? id, PRIVATE_ID_CHUNK) || id is null || string.IsNullOrWhiteSpace(id))
+        {
+            var envelope = GxtSdk.VerifyMessage<ContactInfo>(AddressBook.GetIdCardToken()!);
+            id = envelope.verification_key;
+        }
+        AddressBook.Id = id;
+
         if (!context.Load(out Identities? contacts, ADDRESS_BOOK_CHUNK) || contacts is null)
         {
-            AddressBook.Contacts = [];
+            contacts = [];
         }
         AddressBook.Contacts = contacts;
     }
