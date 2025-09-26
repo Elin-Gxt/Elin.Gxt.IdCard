@@ -38,6 +38,12 @@ class Msg
 
 class CreateMessageTab : YKLayout<List<GxtIdentity>>
 {
+    private Process editProcess = new Process();
+    ~CreateMessageTab()
+    {
+        editProcess.Close();
+        editProcess.Dispose();
+    }
     public override void OnLayout()
     {
         var selectedIndex = 0;
@@ -48,14 +54,17 @@ class CreateMessageTab : YKLayout<List<GxtIdentity>>
         h.Button("Edit Message", () =>
         {
             var tmp = Path.GetTempFileName();
-            var p = Process.Start("notepad.exe", tmp);
-            p.Exited += (sender, e) =>
+            editProcess.StartInfo.FileName = "notepad.exe";
+            editProcess.StartInfo.Arguments = tmp;
+            editProcess.EnableRaisingEvents = true;
+            editProcess.Exited += (sender, e) =>
             {
                 t.text = File.ReadAllText(tmp);
                 File.Delete(tmp);
             };
-        });
-        Button("Send", () =>
+            editProcess.Start();
+        }).WithMinWidth(120);
+        h.Button("Send", () =>
         {
             GUIUtility.systemCopyBuffer = Message.Encrypt(
                 Layer.Data[selectedIndex].IdCard,
