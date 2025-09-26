@@ -4,9 +4,12 @@
     <id>iah.gxt.IdCard</id>
     <author>IAmHardliner</author>
     <loadPriority>60</loadPriority>
-    <version>0.23.50</version>
+    <version>0.23.200</version>
     <tags>General</tags>
     <description>
+    Adds GXT ID Cards to Elin.
+    
+    This mod doesn't do much on its own, but is intended to create ID Cards for use in other mods.
     </description>
     <builtin>false</builtin>
 </Meta>

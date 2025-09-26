@@ -46,6 +46,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="System.Collections.Immutable" Version="9.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="extern\Elin.Gxt\Elin.Gxt.csproj" />
     </ItemGroup>
 
