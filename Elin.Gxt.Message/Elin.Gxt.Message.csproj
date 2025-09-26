@@ -5,8 +5,8 @@
         <Platforms>AnyCPU</Platforms>
         <LangVersion>preview</LangVersion>
         <Nullable>enable</Nullable>
-        <RootNamespace>ElinGxtIdCard</RootNamespace>
-        <AssemblyName>ElinGxtIdCard</AssemblyName>
+        <RootNamespace>ElinGxtMessage</RootNamespace>
+        <AssemblyName>ElinGxtMessage</AssemblyName>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -26,6 +26,30 @@
       </Reference>
     </ItemGroup>
 
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug'">
+      <ProjectReference Include="..\extern\Elin.Gxt\Elin.Gxt.csproj">
+        <Private>false</Private>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+      <Reference Include="$(ElinWorkshopPath)\3575073937\Elin.Gxt.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug'">
+      <ProjectReference Include="..\Elin.Gxt.IdCard\Elin.Gxt.IdCard.csproj">
+        <Private>false</Private>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+      <Reference Include="$(ElinWorkshopPath)\3575073937\ElinGxtIdCard.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
     <ItemGroup>
       <None Remove="Directory.Build.props" />
       <None Remove="LICENSE" />
@@ -38,19 +62,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="extern\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="extern\**" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="System.Collections.Immutable" Version="9.0.9" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="extern\Elin.Gxt\Elin.Gxt.csproj" />
     </ItemGroup>
 
     <Target Name="CopyAssets" AfterTargets="AfterBuild">

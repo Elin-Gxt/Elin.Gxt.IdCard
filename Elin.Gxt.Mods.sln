@@ -2,9 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elin.Gxt.IdCard", "Elin.Gxt.IdCard.csproj", "{8B950087-74AE-BDAD-A504-54CE0A169AC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elin.Gxt.IdCard", "Elin.Gxt.IdCard\Elin.Gxt.IdCard.csproj", "{8B950087-74AE-BDAD-A504-54CE0A169AC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elin.Gxt", "extern\Elin.Gxt\Elin.Gxt.csproj", "{855AFCC2-8796-4389-8F37-4082DC4FDD46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elin.Gxt.Message", "Elin.Gxt.Message\Elin.Gxt.Message.csproj", "{E8D70D68-4589-C721-CE22-5463596722E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{855AFCC2-8796-4389-8F37-4082DC4FDD46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{855AFCC2-8796-4389-8F37-4082DC4FDD46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{855AFCC2-8796-4389-8F37-4082DC4FDD46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D70D68-4589-C721-CE22-5463596722E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D70D68-4589-C721-CE22-5463596722E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D70D68-4589-C721-CE22-5463596722E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D70D68-4589-C721-CE22-5463596722E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

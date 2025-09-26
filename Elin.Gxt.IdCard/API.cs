@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace ElinGxtIdCard;
 
 using ImmutableIdentities = ImmutableDictionary<string, GxtIdentity>;
-public class Identities : Dictionary<string, GxtIdentity>;
+internal class Identities : Dictionary<string, GxtIdentity>;
 
 public class ContactInfo
 {
@@ -57,7 +57,7 @@ public class ContactInfo
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     // only used for serialization
     [JsonConstructor]
-    private ContactInfo() {}
+    private ContactInfo() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 }
 public class GxtIdentity
@@ -68,18 +68,22 @@ public class GxtIdentity
     public string EncryptionKey { get; internal set; }
     [JsonProperty]
     public ContactInfo Meta { get; internal set; }
-    internal GxtIdentity(Envelope<ContactInfo> envelope)
+    [JsonProperty]
+    public string IdCard { get; internal set; }
+    internal GxtIdentity(Envelope<ContactInfo> envelope, string idCard)
     {
         VerificationKey = envelope.verification_key;
         EncryptionKey = envelope.encryption_key;
         Meta = envelope.payload;
+        IdCard = idCard;
     }
 
-    internal GxtIdentity(string verificationKey, string encryptionKey, ContactInfo meta)
+    internal GxtIdentity(string verificationKey, string encryptionKey, ContactInfo meta, string idCard)
     {
         VerificationKey = verificationKey;
         EncryptionKey = encryptionKey;
         Meta = meta;
+        IdCard = idCard;
     }
 
     public GxtIdentity Clone()
@@ -87,14 +91,28 @@ public class GxtIdentity
         return new GxtIdentity(
              (string)VerificationKey.Clone(),
              (string)EncryptionKey.Clone(),
-             Meta.Clone()
+             Meta.Clone(),
+             (string)IdCard.Clone()
         );
     }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     // only used for serialization
     [JsonConstructor]
-    private GxtIdentity() {}
+    private GxtIdentity() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+}
+
+public static class Message
+{
+    public static string Encrypt<T>(string to, T data, string? parent = null)
+    {
+        return GxtSdk.EncryptMessage(AddressBook.PrivateKey!, to, data, parent);
+    }
+
+    public static T Decrypt<T>(string msg)
+    {
+        return GxtSdk.DecryptMessage<T>(msg, AddressBook.PrivateKey!).payload;
+    }
 }
 
 public static class AddressBook
@@ -126,10 +144,16 @@ public static class AddressBook
         return IsLoaded ? GxtSdk.MakeIdCard(PrivateKey!, GetOwnContactInfo()) : null;
     }
 
-    internal static void ExportToClipboard()
+    internal static void ExportIdToClipboard()
     {
         GUIUtility.systemCopyBuffer = GetIdCardToken()!;
         UiHelpers.Say("ID Card copied to Clipboard");
+    }
+
+    internal static void ExportKeyToClipboard()
+    {
+        GUIUtility.systemCopyBuffer = PrivateKey!;
+        UiHelpers.Say("Key copied to Clipboard");
     }
 
     internal static void ImportFromClipboard(Action<GxtIdentity>? onNewIdentity = null)
@@ -156,9 +180,10 @@ public static class AddressBook
             UiHelpers.Say($"Updated existing ID Card: {envelope.payload.FullName}");
             return;
         }
+
         try
         {
-            var identity = new GxtIdentity(envelope);
+            var identity = new GxtIdentity(envelope, id_card_token);
             if (onNewIdentity is not null)
             {
                 onNewIdentity(identity);

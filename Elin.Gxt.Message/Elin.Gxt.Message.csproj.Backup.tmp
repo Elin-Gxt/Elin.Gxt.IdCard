@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <Platforms>AnyCPU</Platforms>
+        <LangVersion>preview</LangVersion>
+        <Nullable>enable</Nullable>
+        <RootNamespace>ElinGxtMessage</RootNamespace>
+        <AssemblyName>ElinGxtMessage</AssemblyName>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <OutputPath>$(ElinGamePath)\Package\Mod_$(AssemblyName)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="$(ElinWorkshopPath)\3544010094\CustomWhateverLoader.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="$(ElinWorkshopPath)\3400020753\YKFramework.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\extern\Elin.Gxt\Elin.Gxt.csproj" Condition="'$(Configuration)'=='Debug'" />
+      <ProjectReference Include="..\extern\Elin.Gxt\Elin.Gxt.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="$(ElinWorkshopPath)\3575073937\Elin.Gxt.dll" Condition="'$(Configuration)'=='Release'">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)'=='Debug'">
+      <ProjectReference Include="..\Elin.Gxt.IdCard\Elin.Gxt.IdCard.csproj" />
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Release'">
+      <Reference Include="$(ElinWorkshopPath)\3575073937\ElinGxtIdCard.dll">
+          <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Directory.Build.props" />
+      <None Remove="LICENSE" />
+      <None Remove="README.md" />
+      <None Remove="extern\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="package\package.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Collections.Immutable" Version="9.0.9" />
+    </ItemGroup>
+
+    <Target Name="CopyAssets" AfterTargets="AfterBuild">
+        <ItemGroup>
+            <Assets Include="package\**\*.*" />
+        </ItemGroup>
+
+        <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(OutDir)%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    </Target>
+</Project>

@@ -37,6 +37,43 @@ class IdCardNote : Thing
     }
 }
 
+class ConfirmationData
+{
+    public string? Question;
+    public string ConfirmText = "Yes";
+    public string AbortText = "No";
+    public Action<bool>? Callback;
+}
+
+class ConfirmationDialogTab : YKLayout<ConfirmationData>
+{
+    public override void OnLayout()
+    {
+        Clear();
+        var cd = Layer.Data;
+        Header(cd.Question!);
+        var h = Horizontal();
+        h.Button(cd.ConfirmText, () =>
+        {
+            cd.Callback!(true);
+            Layer.Close();
+        });
+        h.Button(cd.AbortText, () =>
+        {
+            cd.Callback!(false);
+            Layer.Close();
+        });
+    }
+}
+
+class ConfirmationDialog : YKLayer<ConfirmationData>
+{
+    public override void OnLayout()
+    {
+        CreateTab<ConfirmationDialogTab>("", "");
+    }
+}
+
 class AddressBookContactsTab : YKLayout<Identities>
 {
     private int _Current = 0;
@@ -45,30 +82,35 @@ class AddressBookContactsTab : YKLayout<Identities>
     {
         return [.. _Values.Select(id => id.Meta.FullName)];
     }
+    public void OpenCurrentIdCard()
+    {
+        SE.Rotate();
+        EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(_Values[_Current].Meta));
+    }
     public override void OnLayout()
     {
         _Values = [.. Layer.Data.Values];
+        Clear();
+
         var d = Dropdown(CreateOptions(), i => _Current = i, _Current);
+        d.enabled = _Values.Count > 0;
+
         var h1 = Horizontal();
-        h1.Button("Open", () =>
-        {
-            SE.Rotate();
-            EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(_Values[_Current].Meta));
-        });
+        var o = h1.Button("Open", OpenCurrentIdCard);
+        d.enabled = _Values.Count > 0;
 
-        h1.Button("My ID Card", () =>
-        {
-            SE.Rotate();
-            EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(AddressBook.GetOwnContactInfo()!));
-        }).WithMinWidth(110);
-
-        h1.Button("Delete", () =>
+        UIButton? delete_button = null;
+        delete_button = h1.Button("Delete", () =>
         {
             var id = _Values[_Current].VerificationKey;
             AddressBook.Contacts!.Remove(id);
             _Values.RemoveAll(identity => identity.VerificationKey == id);
             d.options = CreateOptions().ToDropdownOptions();
+            d.enabled = _Values.Count > 0;
+            delete_button!.enabled = _Values.Count > 0;
+            o.enabled = _Values.Count > 0;
         });
+        delete_button.enabled = _Values.Count > 0;
 
         var h2 = Horizontal();
         h2.Button("Import from Clipboard", () =>
@@ -77,10 +119,34 @@ class AddressBookContactsTab : YKLayout<Identities>
             {
                 _Values.Add(id);
                 d.options = CreateOptions().ToDropdownOptions();
+                _Current = _Values.Count - 1;
+                d.value = _Current;
+                d.enabled = true;
+                delete_button!.enabled = true;
+                o.enabled = _Values.Count > 0;
+                SE.Rotate();
+                YK.CreateLayer<ConfirmationDialog, ConfirmationData>(new ConfirmationData
+                {
+                    Question = "ID Card imported successfully. Do you want to open it?",
+                    Callback = (c) =>
+                    {
+                        if (c)
+                        {
+                            SE.Rotate();
+                            EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(id.Meta));
+                        }
+                    }
+                });
             });
         }).WithMinWidth(180);
 
-        h2.Button("Export your ID Card", AddressBook.ExportToClipboard).WithMinWidth(180);
+        h2.Button("Export your ID Card", AddressBook.ExportIdToClipboard).WithMinWidth(180);
+
+        Button("My ID Card", () =>
+        {
+            SE.Rotate();
+            EClass.ui.AddLayer<LayerInfo>().Set(new IdCardNote(AddressBook.GetOwnContactInfo()!));
+        }).WithMinWidth(110);
     }
 }
 
@@ -101,10 +167,17 @@ static class ContextMenu
         YK.CreateLayer<AddressBookLayer, Identities>(AddressBook.Contacts!);
     }
 
-    [CwlContextMenu("GXT/gxt_ui_id_card_copy")]
-    internal static void CopyIdToClipboard()
+#if DEBUG
+    [CwlContextMenu("GXT/gxt_ui_key_export")]
+    internal static void ExportKeyToClipboard()
     {
-        AddressBook.ExportToClipboard();
+        AddressBook.ExportKeyToClipboard();
+    }
+
+    [CwlContextMenu("GXT/gxt_ui_id_card_export")]
+    internal static void ExportIdToClipboard()
+    {
+        AddressBook.ExportIdToClipboard();
     }
 
     [CwlContextMenu("GXT/gxt_ui_id_card_import")]
@@ -120,4 +193,5 @@ static class ContextMenu
             Logger.Error($"Failed to import identity: {e.Message}");
         }
     }
+#endif
 }

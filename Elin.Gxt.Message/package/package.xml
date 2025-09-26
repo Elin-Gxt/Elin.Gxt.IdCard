@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Meta>
+    <title>GXT Message</title>
+    <id>iah.gxt.Message</id>
+    <author>IAmHardliner</author>
+    <loadPriority>70</loadPriority>
+    <version>0.23.200</version>
+    <tags>General</tags>
+    <description>
+    </description>
+    <visibility>Unlisted</visibility>
+    <builtin>false</builtin>
+</Meta>
